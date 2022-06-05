@@ -36,8 +36,19 @@ private:
     };
 
     // TODO: Internal helper functions
+    void set_free_block_map(uint32_t *pointer, uint32_t length, uint32_t value);
+    bool load_inode(size_t inumber, Inode *node);
+    bool save_inode(size_t inumber, Inode *node);
+    bool out_of_bound_inumber(size_t inumber);
+    bool pre_requisite();
+    size_t inner_read(uint32_t *bnumPointer, uint32_t bnumNumber, size_t length, char *data, size_t offset);
+    size_t inner_write(uint32_t *bnumPointer, uint32_t bnumNumber, size_t length, char *data, size_t offset);
+    ssize_t allocate_free_block();//return value must be signed if it uses -1 as error value!!!!
 
     // TODO: Internal member variables
+    Disk *currMountedDisk = NULL;
+    uint32_t *free_block_map = NULL;
+    Inode *inode_table = NULL;
 
 public:
     static void debug(Disk *disk);
@@ -51,4 +62,5 @@ public:
 
     ssize_t read(size_t inumber, char *data, size_t length, size_t offset);
     ssize_t write(size_t inumber, char *data, size_t length, size_t offset);
+    ~FileSystem();
 };
